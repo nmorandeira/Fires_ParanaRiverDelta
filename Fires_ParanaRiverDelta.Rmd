@@ -1,0 +1,400 @@
+---
+title: "Fires in the Paraná River Delta"
+author: "Natalia Morandeira"
+date: "8/7/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+* June 25 - ["El Delta en llamas"](http://www.unsam.edu.ar/tss/el-delta-en-llamas/) (translated "Delta on flames"), published by *Agencia TSS* and authored by Patricia Kandus, Natalia Morandeira and Priscilla Minotti.
+* June 25 - ["El Delta en llamas. Incendios en las islas del Bajo Paraná"](https://noticias.unsam.edu.ar/2020/06/25/el-delta-en-llamas-incendios-en-las-islas-del-bajo-parana/) (translated "Delta on flames. Fires at the islands of the Lower Paraná"), published by *Noticias UNSAM* and authored by Patricia Kandus, Natalia Morandeira and Priscilla Minotti.
+* July 29 - [The Parched Paraná River](https://earthobservatory.nasa.gov/images/147031/the-parched-parana-river), published by *NASA Earth Observatory*, authored by Adam Voiland.
+* July 30 - [Fires in the Paraná Islands](https://radiocut.fm/audiocut/incendios-en-islas-del-parana-natalia-morandeira-conicet-unsam/), radial interview to Natalia Morandeira in AM RadioDos, by Sergio Roulier.
+* July 31 - [Talk on the Paraná River Delta fires](https://twitter.com/SumemosOK/status/1289228703243751424?s=20), at Plataforma Sumemos (Rosario, Argentina)
+* July 31 - Fires & the Paraná River Delta; radial interview at Radio Arroba by RepasadosOK.
+* August 4 - [Twitter thread of the Universidad Nacional de San Martín](https://twitter.com/unsamoficial/status/1290764808304852993?s=20)
+* August 6 - [Incendios en los humedales del Delta: el riesgo que corren las familias isleñas y el daño que se genera en el ecosistema](https://www.bigbangnews.com/actualidad/incendios-en-los-humedales-del-delta-el-riesgo-que-corren-las-familias-islenas-y-el-dano-que-se-genera-en-el-ecosistema-202087165400) (translated "Fire in the Delta wetlands: island habitants in risk and damages to the ecosystem"), published by *BigBangNews*, authored by Agustina Acciardi. 
+* August 10 - ["Rodeados de fuego"](http://www.hamartia.com.ar/2020/08/10/rodeados-fuego/) (translated "Surrounded by fire"), published by *Revista Hamartia*, authored by Natalia Morandeira.
+--------
+## Data source
+- Paraná River Delta limits: shapefile of the study area
+- Hotspots from FIRMS-NASA, https://firms.modaps.eosdis.nasa.gov/map/#t:adv;d:2020-07-28..2020-08-03;@-59.9,-33.1,8z
+
+### Naming conventions of the FIRMS data: 
+
+  - DL_FIRE_M6.xx if you requested MODIS data (M6 stands for MODIS Collection 6), or 
+  - DL_FIRE_V1.xx if you requested VIIRS 375m data from S-NPP
+  - DL_FIRE_J1.xx if you requested VIIRS 375m data from NOAA-20(JPSS-1)
+
+### Spatial data pre-processing
+
+1. Read files and unzip
+1. Handle the files as spatial data
+1. Merge
+1. Re-project
+1. Clip by study area 
+
+To read and unzip, we first set the names of the two ZIP files, one from MODIS and the other from VIIRS satellites. Each of these zips has two shapefiles: recent and archive records.
+
+```{r set_ZIP_names, eval=F}
+zip_hotspots_VIIRS <- "data/zip/DL_FIRE_V1_143928.zip"
+zip_hotspots_MODIS <- "data/zip/DL_FIRE_M6_143927.zip"
+
+unzip(zip_hotspots_VIIRS, exdir = "data/hotspots/") 
+unzip(zip_hotspots_MODIS, exdir = "data/hotspots/") 
+```
+
+Handle spatial data. Four shapefiles + Study area
+Check: name replacement to automatize this step
+
+```{r read_spatial_data, eval=F}
+library(sf)
+hostpots_VIIRS_recent <- st_read("data/hotspots/fire_nrt_V1_143928.shp", quiet=TRUE) 
+hotspots_VIIRS_archive  <- st_read("data/hotspots/fire_archive_V1_143928.shp", quiet=TRUE)
+hotspots_MODIS_recent <- st_read("data/hotspots/fire_archive_M6_143927.shp", quiet=TRUE) 
+hotspots_MODIS_archive <- st_read("data/hotspots/fire_archive_M6_143927.shp", quiet=TRUE)
+study_area <- st_read("data/", quiet=TRUE)
+  
+```
+
+
+To the moment, the script begins with a pre-processed final hotspot layer.
+
+```{r read_file}
+library(sf)
+hotspots_all <- st_read("data/hotspots/focos_all_20200806.shp", quiet=TRUE) 
+study_area <- st_read(dsn = "data/Delta_BajoParana_EPSG5347.shp", quiet=TRUE)
+
+```
+
+This layer has both MODIS and VIIRS hotspots.
+Extract VIIRS 2020 data.
+
+```{r filter_VIIRS_2020}
+
+library(tidyverse)
+library(spdplyr) #se requiere para hacer operaciones dplyr en datos espaciales
+
+hotspots_VIIRS_2020 <- hotspots_all %>%
+  mutate(year = format(ACQ_DATE, "%Y")) %>%
+  filter(year == "2020") %>%
+  filter(INSTRUMENT == "VIIRS")
+
+last_date <- max(hotspots_VIIRS_2020$ACQ_DATE)
+
+hotspots_count2020 <- nrow(hotspots_VIIRS_2020) #Cantidad de focos en 2020
+```
+
+The number of VIIRS hotspots recorded during this year is **`r hotspots_count2020`**, upto **`r last_date`**.
+
+
+library(tmap)
+#elegir dónde graficar
+tmap_mode("view") #que la salida sea en el viewer, con fondo de OpenStreetMap detrás 
+#tmap_mode("plot") #que la salida sea pestaña Plot 
+
+focos <-focos2020_VIIRS
+
+mapa <- tm_shape(focos,  bbox= delta) + 
+  tm_dots(col = "red", alpha = 0.3) + 
+  tm_facets(along= "ACQ_DATE", free.coords = F) +
+  tm_layout(title = "Focos de incendio en el Bajo Paraná - 2020", legend.frame = T) +
+  tm_credits("Kandus, Morandeira, Minotti - 2020, en base a datos VIIRS - FIRMS-NASA", bg.color = "white") +
+  tm_shape(delta) +
+  tm_borders(col = "grey60", lwd = 2) 
+
+mapa
+
+## grafico ### 
+library(janitor)
+
+focos2020 <- focos2020_VIIRS@data
+
+
+
+```{r tidy}
+library(janitor)
+focos2020 <- hotspots_VIIRS_2020
+st_geometry(focos2020) <- NULL #quitar geometría
+focos2020 <- clean_names(focos2020)
+colnames(focos2020)
+
+focos_cum <- focos2020 %>%
+  mutate(cantidad = 1) %>%
+  group_by(acq_date) %>%
+  summarize(cantidad_diaria = sum(cantidad)) 
+focos_cum$acumulado <- cumsum(focos_cum$cantidad_diaria)
+head(focos_cum)
+```
+
+#cargo una foto para usar de fondo en la imagen
+library(png)
+library(grid)
+img <- readPNG("quemas_fotoCabandie2.png") #foto de Juan Cabandié
+
+```{r plot_foto, eval=F}
+p <- focos_cum %>%
+  pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
+  ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
+  annotation_custom(rasterGrob(img, width = unit(1,"npc"), height = unit(1,"npc")), 
+                    -Inf, Inf, -Inf, Inf) +
+  geom_line() +
+  scale_color_manual(values=c("red", "yellow"),  labels = c("Focos acumulados", "Nuevos focos")) +
+  xlab("Fecha") +
+  ylab("Cantidad de focos de calor") +
+  scale_x_date(date_labels = "%d/%m/%Y", breaks = "week", limits = as.Date(c("2020-01-01", "2020-07-21"))) +
+  scale_y_continuous(breaks=seq(from = 0, to = 4000, by = 500)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
+  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día y acumulados al 17/06/2020, en base a datos VIIRS de FIRMS-NASA", caption = "Patricia Kandus, Natalia Morandeira y Priscilla Minotti; 3iA-UNSAM. Foto: MAyDS") 
+
+p
+
+ggsave("Focos_acumulados_2020.png", plot = p, width = 8, height = 5, dpi = 300)
+```
+configurar maximo
+fecha del plot (puede ser en caption)
+
+```{r plot_cum}
+p2 <- focos_cum %>%
+  pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
+  ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
+  #annotation_custom(rasterGrob(img, width = unit(1,"npc"), height = unit(1,"npc")), 
+  #                  -Inf, Inf, -Inf, Inf) +
+  geom_line() +
+  scale_color_manual(values=c("darkred", "navyblue"),  labels = c("Focos acumulados", "Focos activos")) +
+  xlab("Fecha") +
+  ylab("Cantidad de focos de incendio") +
+  scale_x_date(date_labels = "%d/%m/%Y", breaks = "week") +
+  scale_y_continuous(breaks=seq(from = 0, to = 15000, by = 1000)) +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
+  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día y acumulados al 6/08/2020, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
+
+p2
+
+p2b <- focos_cum %>%
+  pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
+  filter(focos == "cantidad_diaria") %>%
+  ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
+  #annotation_custom(rasterGrob(img, width = unit(1,"npc"), height = unit(1,"npc")), 
+  #                  -Inf, Inf, -Inf, Inf) +
+  geom_line() +
+  scale_color_manual(values=c("navyblue", "navyblue"),  labels = c("Focos diarios", "Nuevos focos")) +
+  xlab("Fecha") +
+  ylab("Cantidad de focos de incendio") +
+  scale_x_date(date_labels = "%d/%m/%Y", breaks = "week") +
+  scale_y_continuous(breaks=seq(from = 0, to = 1000, by = 100)) +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
+  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
+
+p2b
+
+
+ggsave("Focos_acumulados_2020_sinfoto_actualizado_2020-08-06.png", plot = p2, width = 8, height = 5, dpi = 300)
+ggsave("Focos_20200806_daily.png", plot = p2b, width = 8, height = 5, dpi = 300)
+
+#idem en inglés
+p3 <- focos_cum %>%
+  pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
+  ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
+  #annotation_custom(rasterGrob(img, width = unit(1,"npc"), height = unit(1,"npc")), 
+  #                  -Inf, Inf, -Inf, Inf) +
+  geom_line() +
+  scale_color_manual(values=c("darkred", "navyblue"),  labels = c("Cummulative hotspots", "New hotspots")) +
+  xlab("Date") +
+  ylab("Number of VIIRS hotspots") +
+  scale_x_date(date_labels = "%m/%d/%Y", breaks = "week") +
+  scale_y_continuous(breaks=seq(from = 0, to = 15000, by = 1000)) +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.15, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
+  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots and cummulative numbers, based on VIIRS data - FIRMS-NASA", caption = "Patricia Kandus, Natalia Morandeira and Priscilla Minotti; 3iA-UNSAM")  
+
+p3
+
+ggsave("Focos_acumulados_2020_sinfoto_actualizado_2020-08_06_english.png", plot = p3, width = 8, height = 5, dpi = 300)
+
+
+```
+
+## plot de datos historicos #####
+en este caso sólo miramos MODIS porque nos interesa comparar el 2008 con el 2020, y los datos VIIRS están disponibles desde 2012. La resolución de MODIS es de 1 km, por lo que se detectan menos focos (y más grandes) que con VIIRS (resolución 375 m)
+
+```{r MODIS}
+focos_MODIS <- hotspots_all
+
+focos_MODIS <- clean_names(focos_MODIS)
+colnames(focos_MODIS)
+
+focos_MODIS <- focos_MODIS %>%
+  filter(instrument == "MODIS") %>%
+  mutate(cantidad = 1) %>%
+  group_by(acq_date) %>%
+  summarize(cantidad_diaria = sum(cantidad)) 
+
+head(focos_MODIS)
+```
+
+```{r modis2}
+#calculo de focos por anio
+focos_MODIS_anio <- focos_MODIS %>% 
+  mutate(anio = format(acq_date, "%Y")) %>%
+  group_by(anio) %>%
+  summarize(cantidad_anio = sum(cantidad_diaria))
+
+glimpse(focos_MODIS_anio)
+write.csv(x = focos_MODIS_anio, file = "focos_anuales_MODIS.csv")
+
+View(focos_MODIS_anio)
+
+p0 <- ggplot(subset(focos_MODIS_anio, focos_MODIS_anio$anio!="2000"), aes(x=anio, y=cantidad_anio)) +
+  geom_col( fill="lightblue") +
+  geom_text(aes(label = cantidad_anio), col="black") +
+  xlab("Año") +
+  ylab("Cantidad de focos MODIS por año") +
+  theme_bw()
+p0
+```
+incluir infoo de cuánto más extendidos fueron en 2008
+
+#diario
+p3 <- focos_MODIS %>%
+  ggplot(aes (x=acq_date, y=cantidad_diaria)) +
+  geom_line(color="darkred") +
+  xlab("Fecha") +
+  ylab("Cantidad de focos de incendio") +
+  scale_x_date(date_labels = "%d/%m/%Y", breaks = "year") +
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
+  labs(title="Datos históricos - incendios en el Delta del Paraná (Argentina)", subtitle = "Focos de calor por día (2001 - presente), en base a datos MODIS de FIRMS-NASA", caption = "Patricia Kandus, Natalia Morandeira y Priscilla Minotti; 3iA-UNSAM") 
+
+p3
+
+ggsave("Focos_historicos_diarios.png", plot = p3, width = 8, height = 5, dpi = 300)
+
+
+#mensual
+
+#agrupar dias en meses
+focos_MODIS_mes <- focos_MODIS %>% 
+  mutate(mes = format(acq_date, "%Y/%m")) %>%
+  group_by(mes) %>%
+  summarize(cantidad_mes = sum(cantidad_diaria))
+
+write.csv(x = focos_MODIS_mes, file = "focos_mensuales.csv")
+
+
+#convertir a fecha
+focos_MODIS_mes$mes <- as.Date(paste(focos_MODIS_mes$mes,1,sep="/"),"%Y/%m/%d")
+head(focos_MODIS_mes)
+
+p4 <-  focos_MODIS_mes %>%
+  ggplot(aes (x=mes, y=cantidad_mes)) +
+  geom_line(col="darkred") +
+  scale_color_manual(values=c("red", "blue"),  labels = c("Focos acumulados", "Nuevos focos")) +
+  xlab("Fecha") +
+  ylab("Cantidad de focos de incendio") +
+  scale_x_date(date_labels = "%m/%Y", breaks = "6 months") +
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
+  labs(title="Datos históricos - incendios en el Delta del Paraná (Argentina)", subtitle = "Focos de calor mensuales (2001 - presente), en base a datos MODIS de FIRMS-NASA", caption = "Patricia Kandus, Natalia Morandeira y Priscilla Minotti; 3iA-UNSAM") 
+
+p4
+
+ggsave("Focos_historicos_mensual.png", plot = p4, width = 8, height = 5, dpi = 300)
+
+
+### es posible comparar focos VIIRS desde 2012 ##########
+
+focos_VIIRS <- focos_all@data
+
+focos_VIIRS <- clean_names(focos_VIIRS)
+colnames(focos_VIIRS)
+
+focos_VIIRS <- focos_VIIRS %>%
+  filter(instrument == "VIIRS") %>%
+  mutate(cantidad = 1) %>%
+  group_by(acq_date) %>%
+  summarize(cantidad_diaria = sum(cantidad)) 
+
+head(focos_VIIRS)
+
+write.csv(x = focos_VIIRS, file = "focos_diarios_VIIRS.csv")
+
+
+#calculo de focos por anio
+focos_VIIRS_anio <- focos_VIIRS %>% 
+  mutate(anio = format(acq_date, "%Y")) %>%
+  group_by(anio) %>%
+  summarize(cantidad_anio = sum(cantidad_diaria))
+
+glimpse(focos_VIIRS_anio)
+write.csv(x = focos_VIIRS_anio, file = "focos_anuales_VIIRS.csv")
+
+View(focos_VIIRS_anio)
+
+p0 <- ggplot(subset(focos_VIIRS_anio, focos_VIIRS_anio$anio!="2000"), aes(x=anio, y=cantidad_anio)) +
+  geom_col( fill="lightblue") +
+  geom_text(aes(label = cantidad_anio), col="black") +
+  xlab("Año") +
+  ylab("Cantidad de focos VIIRS por año") +
+  theme_bw()
+p0
+
+
+focos_VIIRS_mes <- focos_VIIRS %>% 
+  mutate(mes = format(acq_date, "%Y/%m")) %>%
+  group_by(mes) %>%
+  summarize(cantidad_mes = sum(cantidad_diaria))
+
+#convertir a fecha
+focos_VIIRS_mes$mes <- as.Date(paste(focos_VIIRS_mes$mes,1,sep="/"),"%Y/%m/%d")
+head(focos_VIIRS_mes)
+
+p0 <- ggplot(focos_VIIRS_mes, aes(x=mes, y=cantidad_mes)) +
+  geom_col( fill="lightblue") +
+  geom_text(aes(label = cantidad_mes), col="black") +
+  xlab("mes") +
+  ylab("Cantidad de focos VIIRS por mes") +
+  theme_bw()
+p0
+
+
+
+### gráfico combinando VIIRS y MODIS por mes ##############
+# borré sin querer la parte de VIIRS, ver en Dropbox
+
+#preparo label del eje X
+break.fecha <- c(seq(from = as.Date("2001-01-01"), to = as.Date("2020-09-01"), by = "6 months"), as.Date("2021-01-01"))
+
+p4 <-  ggplot(data = focos_MODIS_mes, aes (x=mes, y=cantidad_mes)) +
+  geom_line(col="darkred") +
+  xlab("Fecha") +
+  ylab("Cantidad de focos de incendio") +
+  scale_x_date(date_labels = "%m/%Y", breaks = break.fecha) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
+  labs(title="Datos históricos - incendios en el Delta del Paraná (Argentina)", subtitle = "Focos de calor mensuales (2001 - presente), en base a datos FIRMS-NASA. Las líneas indican \nfocos detectados por MODIS (1 km) y las barras representan focos VIIRS (375 m)", caption = "Patricia Kandus, Natalia Morandeira y Priscilla Minotti; 3iA-UNSAM") 
+
+p4 <- p4 + geom_col(data= focos_VIIRS_mes, aes (x=mes, y=cantidad_mes, group=1),  fill="orange", alpha=0.5, width = 30)
+
+p4
+
+ggsave("Focos_historicos_ambossensores.png", plot = p4, width = 8, height = 5, dpi = 300)
+
+
+p5 <-  ggplot(data = focos_MODIS_mes, aes (x=mes, y=cantidad_mes)) +
+  geom_line(col="darkred") +
+  xlab("Date") +
+  ylab("Number of hotspots") +
+  scale_x_date(date_labels = "%m/%Y", breaks = break.fecha) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
+  labs(title="Historical data - Potential fires in the Paraná River Delta (Argentina)", subtitle = "Monthly number of hotspots (2001 - present), based on FIRMS-NASA data. \nLines indicate MODIS hotspots (1 km) and bars indicate VIIRS hotspots (375 m)", caption = "Patricia Kandus, Natalia Morandeira and Priscilla Minotti; 3iA-UNSAM") 
+
+p5 <- p5 + geom_col(data= focos_VIIRS_mes, aes (x=mes, y=cantidad_mes, group=1),  fill="orange", alpha=0.5, width = 30)
+
+p5
+
+ggsave("Focos_historicos_ambossensores_english.png", plot = p5, width = 8, height = 5, dpi = 300)
