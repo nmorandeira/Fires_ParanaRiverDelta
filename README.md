@@ -8,6 +8,9 @@ Natalia Morandeira (nmorandeira@unsam.edu.ar, Assistant Researcher CONICET, 3iA-
 Patricia Kandus and Priscilla Minotti collaborated with the ecological analysis of the wildifire situation. Priscilla Minotti contributed with code.
 Patricia Kandus and Priscilla Minotti (*Instituto de Investigación e Ingeniería Ambiental, Universidad Nacional de San Martín*, Buenos Aires, Argentina) 
 
+## License
+Please refer to: https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/LICENSE.md
+
 ## Abstract 
 
 Wildfires can be monitored and analyzed using thermal hotspots records derived from satellite data. In 2020, the Paraná River floodplain (Argentina) is suffering from a severe drought, and thousands of hotspots —probably active fires— are daily reported by the Fire Information for Resource Management System (FIRMS-NASA). FIRMS-NASA products are provided in several spatial objects (shapefiles): recent and archive records from several sensors. I aimed to handle these data, analyze the number of hotspots during 2020, and compare the disaster with previous years' situation. I had to reproduce the analyses and plots several times, because I was asked by journalists and also because I share information on my social networks. The main used libraries are sf, tidyverse, spdplyr, ggplot2 and RMarkDown. This workflow can be used to analyze hotspot data in any other interest area.
