@@ -1,5 +1,5 @@
 # Work-in-progress
-This is a work-in-progress and I'm planning to write an article with the analysis on the fires in the Paraná River Delta. Please write me if you wish to use the script: nmorandeira@unsam.edu.ar
+This is a work-in-progress and I'm planning to write an article on the analysis of the fires in the Paraná River Delta. Please write me if you wish to use the script: nmorandeira@unsam.edu.ar
 
 ## License
 This work is licensed under the _Creative Commons Attribution-NonCommercial-ShareLike 4.0 International_: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
