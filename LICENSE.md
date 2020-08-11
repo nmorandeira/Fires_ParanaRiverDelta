@@ -9,4 +9,4 @@ This work is licensed under the _Creative Commons Attribution-NonCommercial-Shar
 Este es un trabajo en desarrollo y mi intención es escribir un artículo sobre los incendios en el Delta. Por favor escribime si tenés intención de usar el script: nmorandeira@unsam.edu.ar
 
 ## Licencia
-- Este trabajo se publica bajo la licencia _Creative Commons Atribución/Reconocimiento-NoComercial-CompartirIgual 4.0 Internacional_: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.es
+Este trabajo se publica bajo la licencia _Creative Commons Atribución/Reconocimiento-NoComercial-CompartirIgual 4.0 Internacional_: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.es
