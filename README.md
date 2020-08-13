@@ -28,4 +28,5 @@ The data analysis and plots were included in several publications that aimed to 
 * August 4 - [Twitter thread of the Universidad Nacional de San Martín](https://twitter.com/unsamoficial/status/1290764808304852993?s=20)
 * August 6 - [Incendios en los humedales del Delta: el riesgo que corren las familias isleñas y el daño que se genera en el ecosistema](https://www.bigbangnews.com/actualidad/incendios-en-los-humedales-del-delta-el-riesgo-que-corren-las-familias-islenas-y-el-dano-que-se-genera-en-el-ecosistema-202087165400) (translated "Fire in the Delta wetlands: island habitants in risk and damages to the ecosystem"), published by *BigBangNews*, authored by Agustina Acciardi. 
 * August 10 - ["Rodeados de fuego"](http://www.hamartia.com.ar/2020/08/10/rodeados-fuego/) (translated "Surrounded by fire"), published by *Revista Hamartia*, authored by Natalia Morandeira.
+* August 12 - [Up in smoke? Argentina's delta blaze sparks worry - and legal action](https://news.trust.org/item/20200811145310-yr272/), published by *Thomson Reuters Foundation*, authored by Marcela Valente.
 
