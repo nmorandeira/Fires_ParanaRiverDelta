@@ -5,8 +5,8 @@ Analysis of thermal hotspots during the fire events in the Paraná River Delta
 Natalia Morandeira (nmorandeira@unsam.edu.ar, Assistant Researcher CONICET, 3iA-UNSAM)
 
 ## Collaborators
-Patricia Kandus and Priscilla Minotti collaborated with the ecological analysis of the wildifire situation. Priscilla Minotti contributed with code.
 Patricia Kandus and Priscilla Minotti (*Instituto de Investigación e Ingeniería Ambiental, Universidad Nacional de San Martín*, Buenos Aires, Argentina) 
+collaborated with the ecological analysis of the wildifire situation. Priscilla Minotti contributed with code.
 
 ## License
 Please refer to: https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/LICENSE.md
