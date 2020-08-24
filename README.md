@@ -32,3 +32,21 @@ The data analysis and plots were included in several publications that aimed to 
 * August 13 - [Incendios en el Delta: isleñxs y humedales en peligro](http://noticias.unsam.edu.ar/2020/8/13/incendios-en-el-delta-islenxs-y-humedales-en-peligro/) (translated "Fires in the Delta: island inhabitants and wetlands in danger"), published by *Noticias UNSAM*, authored by Solana Camaño.
 * August 14 - [Ecología: la pandemia, el ambiente y un futuro incierto](https://chequeado.com/el-explicador/ecologia-la-pandemia-el-ambiente-y-un-futuro-incierto/) (translated: "Ecology: the pandemia, the environment and an uncertain future"), published by *Chequeado*, authored by Fabricio Ballarini, Juan Eduardo Bonnin, Florencia Curzel and Luciana Peirone Cappri.
 * August 24 - [Que la ciencia te acompañe. En la penumbra de un suave interior](https://www.cenital.com/entre-la-penumbra-de-un-suave-interior/) (translated: "May science be with you. In the gloom of a soft interior"), newsletter published by *Cenital*, authored by Agostina Mileo.
+
+# Última actualización / Last update 
+## Fecha 23/08/2020 / Date: 08/23/2020
+### En castellano (In Spanish, English below)
+El número de focos VIIRS registrados durante este año en el Delta del Paraná es **24708**, hasta el **23/08/2020**
+
+![Focos diarios](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_diario_2020-08-23.png)
+
+![Focos diarios y acumulados](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_acumulados_2020-08-23.png)
+
+
+### In English (en inglés, en castellano arriba)
+The number of VIIRS hotspots recorded during this year in the Paraná River Delta is **24708**, up to **2020-08-23**.
+
+![Daily hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_daily_2020-08-23.png)
+
+![Daily and cummulative hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_cum_2020-08-23.png)
+
