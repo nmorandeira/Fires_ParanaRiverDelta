@@ -79,7 +79,7 @@ last_date <- max(hotspots_VIIRS_2020$ACQ_DATE)
 hotspots_count2020 <- nrow(hotspots_VIIRS_2020) #Cantidad de focos en 2020
 ```
 
-The number of VIIRS hotspots recorded during this year is **`r hotspots_count2020`**, upto **`r last_date`**.
+The number of VIIRS hotspots recorded during this year is **`r hotspots_count2020`**, up to **`r last_date`**.
 
 
 library(tmap)
