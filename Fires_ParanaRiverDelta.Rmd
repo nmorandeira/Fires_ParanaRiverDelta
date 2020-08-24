@@ -56,7 +56,7 @@ To the moment, the script begins with a pre-processed final hotspot layer.
 
 ```{r read_file}
 library(sf)
-hotspots_all <- st_read("data/hotspots/focos_all_20200806.shp", quiet=TRUE) 
+hotspots_all <- st_read("data/hotspots/focos_all_20200823.shp", quiet=TRUE) 
 study_area <- st_read(dsn = "data/Delta_BajoParana_EPSG5347.shp", quiet=TRUE)
 
 ```
@@ -149,7 +149,8 @@ configurar maximo
 fecha del plot (puede ser en caption)
 
 ```{r plot_cum}
-p2 <- focos_cum %>%
+#cum
+plot_cum <- focos_cum %>%
   pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
   ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
   #annotation_custom(rasterGrob(img, width = unit(1,"npc"), height = unit(1,"npc")), 
@@ -157,39 +158,38 @@ p2 <- focos_cum %>%
   geom_line() +
   scale_color_manual(values=c("darkred", "navyblue"),  labels = c("Focos acumulados", "Focos activos")) +
   xlab("Fecha") +
-  ylab("Cantidad de focos de incendio") +
+  ylab("Cantidad de focos de calor") +
   scale_x_date(date_labels = "%d/%m/%Y", breaks = "week") +
-  scale_y_continuous(breaks=seq(from = 0, to = 15000, by = 1000)) +
+  scale_y_continuous(breaks=seq(from = 0, to = (hotspots_count2020 + 1000), by = 1000)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
   labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día y acumulados al 6/08/2020, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
 
-p2
+plot_cum
 
-p2b <- focos_cum %>%
+#daily
+plot_daily <- focos_cum %>%
   pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
   filter(focos == "cantidad_diaria") %>%
   ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
-  #annotation_custom(rasterGrob(img, width = unit(1,"npc"), height = unit(1,"npc")), 
-  #                  -Inf, Inf, -Inf, Inf) +
   geom_line() +
   scale_color_manual(values=c("navyblue", "navyblue"),  labels = c("Focos diarios", "Nuevos focos")) +
   xlab("Fecha") +
-  ylab("Cantidad de focos de incendio") +
+  ylab("Cantidad de focos de calor") +
   scale_x_date(date_labels = "%d/%m/%Y", breaks = "week") +
-  scale_y_continuous(breaks=seq(from = 0, to = 1000, by = 100)) +
+  scale_y_continuous(breaks=seq(from = 0, to = 2000, by = 100)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
   labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
 
-p2b
+plot_daily
 
 
-ggsave("Focos_acumulados_2020_sinfoto_actualizado_2020-08-06.png", plot = p2, width = 8, height = 5, dpi = 300)
-ggsave("Focos_20200806_daily.png", plot = p2b, width = 8, height = 5, dpi = 300)
+ggsave("output/Focos_acumulados_2020-08-23.png", plot = plot_cum, width = 8, height = 5, dpi = 300)
+ggsave("output/Focos_diario_2020-08-23.png", plot = plot_daily, width = 8, height = 5, dpi = 300)
 
 #idem en inglés
-p3 <- focos_cum %>%
+plot_cum_eng <- focos_cum %>%
   pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
   ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
   #annotation_custom(rasterGrob(img, width = unit(1,"npc"), height = unit(1,"npc")), 
@@ -199,14 +199,32 @@ p3 <- focos_cum %>%
   xlab("Date") +
   ylab("Number of VIIRS hotspots") +
   scale_x_date(date_labels = "%m/%d/%Y", breaks = "week") +
-  scale_y_continuous(breaks=seq(from = 0, to = 15000, by = 1000)) +
+  scale_y_continuous(breaks=seq(from = 0, to = (hotspots_count2020 + 1000), by = 1000)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.15, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
-  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots and cummulative numbers, based on VIIRS data - FIRMS-NASA", caption = "Patricia Kandus, Natalia Morandeira and Priscilla Minotti; 3iA-UNSAM")  
+  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots and cummulative numbers, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
 
-p3
+plot_cum_eng
 
-ggsave("Focos_acumulados_2020_sinfoto_actualizado_2020-08_06_english.png", plot = p3, width = 8, height = 5, dpi = 300)
+ggsave("output/Hotspot_cum_2020-08-23.png", plot = plot_cum_eng, width = 8, height = 5, dpi = 300)
+
+plot_daily_eng <- focos_cum %>%
+  pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
+  filter(focos == "cantidad_diaria") %>%
+  ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
+  geom_line() +
+  scale_color_manual(values=c("navyblue", "navyblue"),  labels = c("Cummulative hotspots", "New hotspots")) +
+  xlab("Date") +
+  ylab("Number of VIIRS hotspots") +
+  scale_x_date(date_labels = "%m/%d/%Y", breaks = "week") +
+  scale_y_continuous(breaks=seq(from = 0, to = 2000, by = 100)) +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
+  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
+
+plot_daily_eng
+
+ggsave("output/Hotspot_daily_2020-08-23.png", plot = plot_daily_eng, width = 8, height = 5, dpi = 300)
 
 
 ```
