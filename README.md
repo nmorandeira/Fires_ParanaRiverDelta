@@ -1,15 +1,16 @@
-# Fires in the Paraná River Delta
-Analysis of thermal hotspots during the fire events in the Paraná River Delta
+# Incendios en el Delta del Paraná / Fires in the Paraná River Delta
+ES: Análisis de focos de calor durante los incendios del Delta del Paraná en 2020
+EN: Analysis of thermal hotspots during the fire events in the Paraná River Delta en 2020
 
-## Author
+## Autora / Author
 Natalia Morandeira (nmorandeira@unsam.edu.ar, Assistant Researcher CONICET, 3iA-UNSAM)
 
-## Collaborators
-Patricia Kandus and Priscilla Minotti (*Instituto de Investigación e Ingeniería Ambiental, Universidad Nacional de San Martín*, Buenos Aires, Argentina) 
-collaborated with the ecological analysis of the wildifire situation. Priscilla Minotti contributed with code.
+## Colaboradoras / Collaborators
+ES: Patricia Kandus & Priscilla Minotti (*Instituto de Investigación e Ingeniería Ambiental, Universidad Nacional de San Martín*, Buenos Aires, Argentina) colaboraron con el análisis ecológicos de los incendios. Priscilla Minotti contribuyó con código de R. 
+EN: Patricia Kandus & Priscilla Minotti (*Instituto de Investigación e Ingeniería Ambiental, Universidad Nacional de San Martín*, Buenos Aires, Argentina) collaborated with the ecological analysis of the wildifire situation. Priscilla Minotti contributed with R code.
 
-## License
-Please refer to: https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/LICENSE.md
+## Licencia / License
+Por favor referirse a / Please refer to: https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/LICENSE.md
 
 ## Abstract 
 
