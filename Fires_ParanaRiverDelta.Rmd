@@ -268,6 +268,9 @@ p0 <- ggplot(subset(focos_MODIS_anio, focos_MODIS_anio$anio!="2000"), aes(x=anio
   ylab("Cantidad de focos MODIS por año") +
   theme_bw()
 p0
+
+ggsave("output/MODIS_2001-2020.png", plot = p0, width = 8, height = 5, dpi = 300)
+
 ```
 incluir infoo de cuánto más extendidos fueron en 2008
 
@@ -352,6 +355,8 @@ p0 <- ggplot(subset(focos_VIIRS_anio, focos_VIIRS_anio$anio!="2000"), aes(x=anio
   ylab("Cantidad de focos VIIRS por año") +
   theme_bw()
 p0
+
+ggsave("output/VIIRS_2012-2020.png", plot = p0, width = 8, height = 5, dpi = 300)
 
 
 focos_VIIRS_mes <- focos_VIIRS %>% 
