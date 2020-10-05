@@ -383,7 +383,7 @@ ggsave("output/Focos_VIIRS2020_mensual.png", plot = p3, width = 8, height = 5, d
 
 
 ### gráfico combinando VIIRS y MODIS por mes ##############
-# borré sin querer la parte de VIIRS, ver en Dropbox
+borré sin querer la parte de VIIRS, ver en Dropbox
 
 #preparo label del eje X
 break.fecha <- c(seq(from = as.Date("2001-01-01"), to = as.Date("2020-09-01"), by = "6 months"), as.Date("2021-01-01"))
