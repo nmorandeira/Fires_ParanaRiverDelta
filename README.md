@@ -24,22 +24,22 @@ Los incendios de áreas naturales pueden ser monitoreados y analizados utilizand
 Wildfires can be monitored and analyzed using thermal hotspots records derived from satellite data. In 2020, the Paraná River floodplain (Argentina) is suffering from a severe drought, and thousands of hotspots —probably active fires— are daily reported by the Fire Information for Resource Management System (FIRMS-NASA). FIRMS-NASA products are provided in several spatial objects (shapefiles): recent and archive records from several sensors. I aimed to handle these data, analyze the number of hotspots during 2020, and compare the disaster with previous years' situation. I had to reproduce the analyses and plots several times, because I was asked by journalists and also because I share information on my social networks. The main used libraries are sf, tidyverse, spdplyr, ggplot2 and RMarkDown. This workflow can be used to analyze hotspot data in any other interest area.
 
 # Última actualización / Last update 
-## Fecha 01/09/2020 / Date: 09/01/2020
+## Fecha 04/10/2020 / Date: 10/04/2020
 ### En castellano (In Spanish, English below)
-El número de focos VIIRS registrados durante este año en el Delta del Paraná es **26667**, hasta el **01/09/2020**
+El número de focos VIIRS registrados durante este año en el Delta del Paraná es **33.956**, hasta el **04/10/2020**
 
-![Focos diarios](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_diario_2020-09-01.png)
+![Focos diarios](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_diario_2020-10-04.png)
 
-![Focos diarios y acumulados](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_acumulados_2020-09-01.png)
+![Focos diarios y acumulados](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_acumulados_2020-10-04.png)
 
 
 ### In English (en inglés, en castellano arriba)
 The number of VIIRS hotspots recorded during this year in the Paraná River Delta is 
-**26667**, up to **2020-09-01**.
+**33,956**, up to **2020/10/04**.
 
-![Daily hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_daily_2020-09-01.png)
+![Daily hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_daily_2020-10-04.png)
 
-![Daily and cummulative hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_cum_2020-09-01.png)
+![Daily and cummulative hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_cum_2020-10-04.png)
 
 
 ## Links a artículos publicados, entrevistas y charlas durante 2020
@@ -67,3 +67,4 @@ EN: The data analysis and plots were included in several publications that aimed
 * August 28 - [Ecocidio en el Delta: un cementerio de animales carbonizados](http://cosecharoja.org/ecocidio-en-el-delta-un-cementerio-de-animales-carbonizados/) (translated: "Ecocide in the Delta: a charred animal graveyard"), published by *Cosecha Roja*, authored by Matías Máximo.
 * September 02 - [Argentina's wetlands under assault by worst fires in more than a decade](https://www.reuters.com/article/us-argentina-environment/argentinas-wetlands-under-assault-by-worst-fires-in-more-than-a-decade-idUSKBN25T35V), published by *Thomson Reuters*, authored by Cassandra Garrison and Maximilian Heath.
 * September 04 - [Natalia Morandeira: “En lo que va del año se registraron 25 mil focos de incendios”](https://defonline.com.ar/natalia-morandeira-en-lo-que-va-del-ano-se-registraron-25-mil-focos-de-incendios/) (translated: "Natalia Morandeira: 'So far this year, 25 thousand fire hotspots were recorded'"), published by *DEF*, authored by Patricia Fernández Mainardi.
+* September 15 - [Bajo Paraná: un territorio amenazado por el fuego"](https://youtu.be/I_XH_7TfQuM?t=2778) (translated: "Lower Paraná River: a fire-threatened territory), lecture by Patricia Kandus in *Instituto de Investigación e Ingeniería Ambiental, UNSAM".
