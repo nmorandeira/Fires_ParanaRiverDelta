@@ -45,9 +45,9 @@ The number of VIIRS hotspots recorded during this year in the Paraná River Delt
 ## Links a artículos publicados, entrevistas y charlas durante 2020
 ## Links of published articles, interviews and talks during 2020
 
-ES: Los análisis de datos y gráficos fueron incluidos en varias publicaciones que tuvieron por objetivo difundir la situación del Delta del Paraná. También, esta información fue mencionada en entrevistas periodísticas y charlas. Los siguientes artículos y charlas incluyen información derivada del código de R.
+ES: Los análisis de datos y gráficos fueron incluidos en varias publicaciones que tuvieron por objetivo difundir la situación del Delta del Paraná. También, esta información fue mencionada en entrevistas periodísticas y charlas. Los siguientes artículos y charlas incluyen información derivada del código de R incluido en este repositorio.
 
-EN: The data analysis and plots were included in several publications that aimed to spread what is happening in the Paraná River Delta, and also on periodistic interviews and talks. These articles and talks include information generated with this R script.
+EN: The data analysis and plots were included in several publications that aimed to spread what is happening in the Paraná River Delta, and also on periodistic interviews and talks. These articles and talks include information generated with the R script included in this repository.
 
 * June 25 - [El Delta en llamas](http://www.unsam.edu.ar/tss/el-delta-en-llamas/) (translated "Delta on flames"), published by *Agencia TSS* and authored by Patricia Kandus, Natalia Morandeira and Priscilla Minotti.
 * June 25 - [El Delta en llamas. Incendios en las islas del Bajo Paraná](https://noticias.unsam.edu.ar/2020/06/25/el-delta-en-llamas-incendios-en-las-islas-del-bajo-parana/) (translated "Delta on flames. Fires at the islands of the Lower Paraná"), published by *Noticias UNSAM* and authored by Patricia Kandus, Natalia Morandeira and Priscilla Minotti.
