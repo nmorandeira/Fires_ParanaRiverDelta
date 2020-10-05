@@ -56,7 +56,7 @@ To the moment, the script begins with a pre-processed final hotspot layer.
 
 ```{r read_file}
 library(sf)
-hotspots_all <- st_read("data/hotspots/focos_all_20200901.shp", quiet=TRUE) 
+hotspots_all <- st_read("data/hotspots/focos_all_20200410.shp", quiet=TRUE) 
 study_area <- st_read(dsn = "data/Delta_BajoParana_EPSG5347.shp", quiet=TRUE)
 
 ```
@@ -163,7 +163,7 @@ plot_cum <- focos_cum %>%
   scale_y_continuous(breaks=seq(from = 0, to = (hotspots_count2020 + 1000), by = 1000)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
-  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día y acumulados al 6/08/2020, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
+  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día y acumulados al 4/10/2020, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
 
 plot_cum
 
@@ -172,22 +172,22 @@ plot_daily <- focos_cum %>%
   pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
   filter(focos == "cantidad_diaria") %>%
   ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
-  geom_line() +
+  geom_col() +
   scale_color_manual(values=c("navyblue", "navyblue"),  labels = c("Focos diarios", "Nuevos focos")) +
   xlab("Fecha") +
   ylab("Cantidad de focos de calor") +
   scale_x_date(date_labels = "%d/%m/%Y", breaks = "week") +
   scale_y_continuous(breaks=seq(from = 0, to = 2000, by = 100)) +
   theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), axis.line=element_line(color="black"), axis.text.y=element_text(color="black"), legend.position = "none" ) +
   labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
 
 plot_daily
 ```
 
 ```{r grabar}
-ggsave("output/Focos_acumulados_2020-09-01.png", plot = plot_cum, width = 8, height = 5, dpi = 300)
-ggsave("output/Focos_diario_2020-09-01.png", plot = plot_daily, width = 8, height = 5, dpi = 300)
+ggsave("output/Focos_acumulados_2020-10-04.png", plot = plot_cum, width = 8, height = 5, dpi = 300)
+ggsave("output/Focos_diario_2020-10-04.png", plot = plot_daily, width = 8, height = 5, dpi = 300)
 ```
 
 ```{r plots_english}
@@ -205,7 +205,7 @@ plot_cum_eng <- focos_cum %>%
   scale_y_continuous(breaks=seq(from = 0, to = (hotspots_count2020 + 1000), by = 1000)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.15, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
-  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots and cummulative numbers, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
+  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots and cummulative numbers up to 10/04/2020, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
 
 plot_cum_eng
 
@@ -213,22 +213,22 @@ plot_daily_eng <- focos_cum %>%
   pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
   filter(focos == "cantidad_diaria") %>%
   ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
-  geom_line() +
+  geom_col() +
   scale_color_manual(values=c("navyblue", "navyblue"),  labels = c("New hotspots", "New hotspots")) +
   xlab("Date") +
   ylab("Number of VIIRS hotspots") +
   scale_x_date(date_labels = "%m/%d/%Y", breaks = "week") +
   scale_y_continuous(breaks=seq(from = 0, to = 2000, by = 100)) +
   theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position="none", axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
   labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
 
 plot_daily_eng
 ```
 
 ```{r save}
-ggsave("output/Hotspot_cum_2020-09-01.png", plot = plot_cum_eng, width = 8, height = 5, dpi = 300)
-ggsave("output/Hotspot_daily_2020-09-01.png", plot = plot_daily_eng, width = 8, height = 5, dpi = 300)
+ggsave("output/Hotspot_cum_2020-10-04.png", plot = plot_cum_eng, width = 8, height = 5, dpi = 300)
+ggsave("output/Hotspot_daily_2020-10-04.png", plot = plot_daily_eng, width = 8, height = 5, dpi = 300)
 ```
 
 ## plot de datos historicos #####
@@ -257,7 +257,7 @@ focos_MODIS_anio <- focos_MODIS %>%
   summarize(cantidad_anio = sum(cantidad_diaria))
 
 glimpse(focos_MODIS_anio)
-write.csv(x = focos_MODIS_anio, file = "focos_anuales_MODIS.csv")
+#write.csv(x = focos_MODIS_anio, file = "focos_anuales_MODIS.csv")
 
 View(focos_MODIS_anio)
 
@@ -344,7 +344,7 @@ focos_VIIRS_anio <- focos_VIIRS %>%
   summarize(cantidad_anio = sum(cantidad_diaria))
 
 glimpse(focos_VIIRS_anio)
-write.csv(x = focos_VIIRS_anio, file = "focos_anuales_VIIRS.csv")
+#write.csv(x = focos_VIIRS_anio, file = "focos_anuales_VIIRS.csv")
 
 View(focos_VIIRS_anio)
 
@@ -358,23 +358,27 @@ p0
 
 ggsave("output/VIIRS_2012-2020.png", plot = p0, width = 8, height = 5, dpi = 300)
 
+#2020 mes
 
-focos_VIIRS_mes <- focos_VIIRS %>% 
+focos_VIIRS2020_mes <- focos_VIIRS %>% 
+  filter (acq_date > "2020-01-01") %>%
   mutate(mes = format(acq_date, "%Y/%m")) %>%
   group_by(mes) %>%
   summarize(cantidad_mes = sum(cantidad_diaria))
 
-#convertir a fecha
-focos_VIIRS_mes$mes <- as.Date(paste(focos_VIIRS_mes$mes,1,sep="/"),"%Y/%m/%d")
-head(focos_VIIRS_mes)
+<!-- #convertir a fecha -->
+<!-- focos_VIIRS_mes$mes <- as.Date(paste(focos_VIIRS_mes$mes,1,sep="/"),"%Y/%m/%d") -->
+<!-- head(focos_VIIRS_mes) -->
 
-p0 <- ggplot(focos_VIIRS_mes, aes(x=mes, y=cantidad_mes)) +
+p3 <- ggplot(focos_VIIRS2020_mes, aes(x=mes, y=cantidad_mes)) +
   geom_col( fill="lightblue") +
   geom_text(aes(label = cantidad_mes), col="black") +
   xlab("mes") +
   ylab("Cantidad de focos VIIRS por mes") +
   theme_bw()
-p0
+p3
+
+ggsave("output/Focos_VIIRS2020_mensual.png", plot = p3, width = 8, height = 5, dpi = 300)
 
 
 
