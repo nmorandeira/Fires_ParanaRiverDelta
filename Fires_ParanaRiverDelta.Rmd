@@ -81,7 +81,7 @@ study_area <- st_read("data/Delta_BajoParana_EPSG5347.shp", quiet=TRUE)
 
 **Work in progress** Now we need to merge the shapefiles, reproject them to EPSG 5347 and clip with the study area shapefile.
 
-```{r merge_shp}
+```{r merge_shp, eval=F}
 #Remove CONFIDENCE columns since they have different formats
 hostpots_VIIRS_recent$CONFIDENCE = NULL
 hostpots_VIIRS_archive$CONFIDENCE = NULL
@@ -99,7 +99,7 @@ Alternatively, the script can also begin with a pre-processed final hotspot laye
 
 ```{r read_file, eval = T, include = TRUE}
 library(sf)
-hotspots_all <- st_read("data/hotspots/focos_all_20200410.shp", quiet=TRUE) 
+hotspots_all <- st_read("data/hotspots/focos_all_20200117.shp", quiet=TRUE) 
 study_area <- st_read(dsn = "data/Delta_BajoParana_EPSG5347.shp", quiet=TRUE)
 
 ```
