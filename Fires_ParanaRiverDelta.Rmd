@@ -129,7 +129,7 @@ The number of VIIRS hotspots recorded during this year is **`r hotspots_count202
 
 Let's get a quick interactive map to visualize the location of the hotspot records. The date of the record can be obtained by positioning the mouse onto the point.
 
-```{r map}
+```{r map, eval=F}
 library(tmap)
 tmap_mode("view") 
 mapa <- tm_shape(hotspots_VIIRS_2020,  bbox= study_area) + 
@@ -210,8 +210,6 @@ A plot of the cummulative hostspots. Spanish and English versions.
 plot_acum <- focos_cum %>%
   pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
   ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
-  #annotation_custom(rasterGrob(img, width = unit(1,"npc"), height = unit(1,"npc")), 
-  #                  -Inf, Inf, -Inf, Inf) +
   geom_line() +
   scale_color_manual(values=c("darkred", "navyblue"),  labels = c("Focos acumulados", "Focos activos")) +
   xlab("Fecha") +
@@ -235,7 +233,7 @@ plot_cum_eng <- focos_cum %>%
   scale_color_manual(values=c("darkred", "navyblue"),  labels = c("Cummulative hotspots", "New hotspots")) +
   xlab("Date") +
   ylab("Number of VIIRS hotspots") +
-  scale_x_date(date_labels = "%m/%d/%Y", breaks = "week") 
+  scale_x_date(date_labels = "%m/%d/%Y", breaks = "week") +
   scale_y_continuous(breaks=seq(from = 0, to = (hotspots_count2020 + 1000), by = 2500)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.15, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
@@ -285,7 +283,7 @@ VIIRSagosto <- (focos_VIIRS2020_mes$cantidad_mes)[8]
 ggsave("output/Focos_VIIRS2020_mensual.png", plot = VIIRS2020_mes, width = 8, height = 5, dpi = 300)
 ```
 
-The month with the highest number of hotspots is August, with **`r VIIRSagosto`** hotspots (**`round(VIIRSagosto/hotspots_count2020*100,1)`%** % of the total hotspots up to **`r last_date`**).
+The month with the highest number of hotspots is August, with **`r VIIRSagosto`** hotspots (**`r round(VIIRSagosto/hotspots_count2020*100,1)`%** % of the total hotspots up to **`r last_date`**).
 
 
 ## Historical comparison using MODIS (November 2001 - present)
