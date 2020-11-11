@@ -199,13 +199,8 @@ plot_daily_eng
 We may export these plots.
 
 ```{r save_daily, eval=F, include=T}
-<<<<<<< HEAD
 ggsave("output/Focos_diario_2020-11-10.png", plot = plot_diario, width = 8, height = 5, dpi = 300)
 ggsave("output/Hotspot_daily_2020-11-10.png", plot = plot_daily_eng, width = 8, height = 5, dpi = 300)
-=======
-ggsave("output/Focos_diario_2020-10-04.png", plot = plot_diario, width = 8, height = 5, dpi = 300)
-ggsave("output/Hotspot_daily_2020-10-04.png", plot = plot_daily_eng, width = 8, height = 5, dpi = 300)
->>>>>>> a8a7c5ead622c4e9943587b8aabe666ba7da5c88
 ```
 
 A plot of the cummulative hostspots. Spanish and English versions.
@@ -251,13 +246,8 @@ plot_cum_eng
 
 We may save these plots.
 ```{r save_cum, eval=F, include=T}
-<<<<<<< HEAD
 ggsave("output/Focos_acumulados_2020-11-10.png", plot = plot_acum, width = 8, height = 5, dpi = 300)
 ggsave("output/Hotspot_cum_2020-11-10.png", plot = plot_cum_eng, width = 8, height = 5, dpi = 300)
-=======
-ggsave("output/Focos_acumulados_2020-10-04.png", plot = plot_acum, width = 8, height = 5, dpi = 300)
-ggsave("output/Hotspot_cum_2020-10-04.png", plot = plot_cum_eng, width = 8, height = 5, dpi = 300)
->>>>>>> a8a7c5ead622c4e9943587b8aabe666ba7da5c88
 ```
 
 The next plot summarizes the number of VIIRS hotspots per month. 
