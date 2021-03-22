@@ -24,10 +24,10 @@ Los incendios de áreas naturales pueden ser monitoreados y analizados utilizand
 Wildfires can be monitored and analyzed using thermal hotspots records derived from satellite data. In 2020, the Paraná River floodplain (Argentina) is suffering from a severe drought, and thousands of hotspots —probably active fires— are daily reported by the Fire Information for Resource Management System (FIRMS-NASA). FIRMS-NASA products are provided in several spatial objects (shapefiles): recent and archive records from several sensors. I aimed to handle these data, analyze the number of hotspots during 2020, and compare the disaster with previous years' situation. I had to reproduce the analyses and plots several times, because I was asked by journalists and also because I share information on my social networks. The main used libraries are sf, tidyverse, spdplyr, ggplot2 and RMarkDown. This workflow can be used to analyze hotspot data in any other interest area.
 
 # Última actualización / Last update 
-## Fecha 10/11/2020 / Date: 11/10/2020
+## Fecha 31/12/2020 / Date: 12/31/2020
 ### En castellano (In Spanish, English below)
 El número de focos VIIRS registrados durante el 2020 en el Delta del Paraná es
-**39.821**, hasta el **31/12/2020**
+**39.821**, hasta el **31/12/2020**.
 
 ![Focos diarios](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_diario_2020-12-31.png)
 
