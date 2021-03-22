@@ -1,7 +1,7 @@
 ---
 title: "Fires in the Paraná River Delta"
 author: "Natalia Morandeira"
-date: "8/7/2020"
+date: "8/7/2020, updated 3/22/2021"
 output: html_document
 ---
 
@@ -10,34 +10,38 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 --------
-## Data source
-- Paraná River Delta limits: shapefile of the study area
-- Hotspots from FIRMS-NASA, https://firms.modaps.eosdis.nasa.gov/map/#t:adv;d:2020-07-28..2020-08-03;@-59.9,-33.1,8z
+## Input the spatial objects to R
+
+### Data source
+- Paraná River Delta limits: shapefile of the study area. Save this vector in the path _/data/study_area/_
+- Hotspots from FIRMS-NASA, https://firms.modaps.eosdis.nasa.gov/map/#t:adv;d:2020-07-28..2020-08-03;@-59.9,-33.1,8z . Save the downloaded zip files in the path _/data/zip/_
 
 ### Naming conventions of the FIRMS data: 
 
   - DL_FIRE_M6.xx if you requested MODIS data (M6 stands for MODIS Collection 6), or 
   - DL_FIRE_V1.xx if you requested VIIRS 375m data from S-NPP
-  - DL_FIRE_J1.xx if you requested VIIRS 375m data from NOAA-20(JPSS-1)
+  - DL_FIRE_J1.xx if you requested VIIRS 375m data from NOAA-20 (JPSS-1). _For quick analyses, I usually don't request these data because hotspots may be redundant with VIIRS S-NPP._
 
 ### Spatial data pre-processing
 
 1. Read files and unzip
-1. Handle the files as spatial data
-1. Merge
-1. Re-project
-1. Clip by study area 
+2. Handle the files as spatial data
+3. Merge
+4. Re-project
+5. Clip by study area 
 
 To read and unzip, we first set the names of the two ZIP files, one from MODIS and the other from VIIRS satellites. Each of these zips has two shapefiles: recent and archive records.
 
 ```{r set_ZIP_names, eval=T, include=T}
 zipfiles <- list.files(path = "data/zip/")
-length(zipfiles)
+zipfiles
 ```
 
+We unzip the data.
+
 ```{r unzip, eval=F, include = T}
-MODISzip <- paste("data/zip/", files[1], sep="")
-VIIRSzip <- paste("data/zip/", files[2], sep="")
+MODISzip <- paste("data/zip/", zipfiles[1], sep="")
+VIIRSzip <- paste("data/zip/", zipfiles[2], sep="")
 
 unzip(MODISzip, exdir = "data/hotspots/") 
 unzip(VIIRSzip, exdir = "data/hotspots/") 
@@ -46,7 +50,7 @@ unzip(VIIRSzip, exdir = "data/hotspots/")
 There are `r length(zipfiles)` zip files in the database (expected: two files).
 
 Handle spatial data. Four shapefiles + Study area.
-The code is prepared to detect the appropriate strings and generate the spatial objects.
+The code is prepared to detect the appropriate strings and generate the spatial objects, based on the naming conventions of FIRMS-NASA.
 
 ```{r read_spatial_data, eval=F, include = T}
 library(sf)
@@ -54,46 +58,77 @@ library(stringr)
 spatial_files <- list.files(path = "data/hotspots")
 shp_extension <- str_detect(spatial_files, "shp")=="TRUE"
 spatial_files <- subset(spatial_files, shp_extension == "TRUE")
-  
 
-hostpots_VIIRS_recent <- which(str_detect(spatial_files, "fire_nrt_V1")=="TRUE")
-hostpots_VIIRS_recent <- paste("data/hotspots/", spatial_files[hostpots_VIIRS_recent], sep="")
-hostpots_VIIRS_recent <- st_read(hostpots_VIIRS_recent, quiet=TRUE)
+hotspots_VIIRS_recent <- which(str_detect(spatial_files, "fire_nrt_V1")=="TRUE")
+hotspots_VIIRS_recent <- paste("data/hotspots/", spatial_files[hotspots_VIIRS_recent], sep="")
+hotspots_VIIRS_recent <- st_read(hotspots_VIIRS_recent, quiet=TRUE)
 
-hostpots_VIIRS_archive <- which(str_detect(spatial_files, "fire_archive_V1")=="TRUE")
-hostpots_VIIRS_archive <- paste("data/hotspots/", spatial_files[hostpots_VIIRS_archive], sep="")
-hostpots_VIIRS_archive <- st_read(hostpots_VIIRS_archive, quiet=TRUE)
+hotspots_VIIRS_archive <- which(str_detect(spatial_files, "fire_archive_V1")=="TRUE")
+hotspots_VIIRS_archive <- paste("data/hotspots/", spatial_files[hotspots_VIIRS_archive], sep="")
+hotspots_VIIRS_archive <- st_read(hotspots_VIIRS_archive, quiet=TRUE)
+
+hotspots_MODIS_recent <- which(str_detect(spatial_files, "fire_nrt_M6")=="TRUE")
+hotspots_MODIS_recent <- paste("data/hotspots/", spatial_files[hotspots_MODIS_recent], sep="")
+hotspots_MODIS_recent <- st_read(hotspots_MODIS_recent, quiet=TRUE)
+
+hotspots_MODIS_archive <- which(str_detect(spatial_files, "fire_archive_M6")=="TRUE")
+hotspots_MODIS_archive <- paste("data/hotspots/", spatial_files[hotspots_MODIS_archive], sep="")
+hotspots_MODIS_archive <- st_read(hotspots_MODIS_archive, quiet=TRUE)
+
+study_area <- list.files(path = "data/study_area/")
+study_area_shp <- str_detect(study_area, "shp")=="TRUE"
+study_area <- subset(study_area, study_area_shp == "TRUE")
+study_area <- paste("data/study_area/", study_area, sep="")
+study_area <- st_read(study_area, quiet=TRUE)
 
 
-hostpots_MODIS_recent <- which(str_detect(spatial_files, "fire_nrt_M6")=="TRUE")
-hostpots_MODIS_recent <- paste("data/hotspots/", spatial_files[hostpots_MODIS_recent], sep="")
-hostpots_MODIS_recent <- st_read(hostpots_MODIS_recent, quiet=TRUE)
-
-
-hostpots_MODIS_archive <- which(str_detect(spatial_files, "fire_archive_M6")=="TRUE")
-hostpots_MODIS_archive <- paste("data/hotspots/", spatial_files[hostpots_MODIS_archive], sep="")
-hostpots_MODIS_archive <- st_read(hostpots_MODIS_archive, quiet=TRUE)
-
-
-study_area <- st_read("data/Delta_BajoParana_EPSG5347.shp", quiet=TRUE)
-   
 ```
 
-**Work in progress** Now we need to merge the shapefiles, reproject them to EPSG 5347 and clip with the study area shapefile.
+
+Merge the hotspot data.
 
 ```{r merge_shp, eval=F}
 #Remove CONFIDENCE columns since they have different formats
-hostpots_VIIRS_recent$CONFIDENCE = NULL
-hostpots_VIIRS_archive$CONFIDENCE = NULL
-hostpots_VIIRS_archive$TYPE = NULL
+hotspots_VIIRS_recent$CONFIDENCE = NULL
+hotspots_VIIRS_archive$CONFIDENCE = NULL
+hotspots_VIIRS_archive$TYPE = NULL
 
-hostpots_MODIS_recent$CONFIDENCE = NULL
-hostpots_MODIS_archive$CONFIDENCE = NULL
-hostpots_MODIS_archive$TYPE = NULL
+hotspots_MODIS_recent$CONFIDENCE = NULL
+hotspots_MODIS_archive$CONFIDENCE = NULL
+hotspots_MODIS_archive$TYPE = NULL
+
+#Merge
+hotspots_v <- rbind(hotspots_VIIRS_recent,hotspots_VIIRS_archive)
+hotspots_m <- rbind(hotspots_MODIS_recent, hotspots_MODIS_archive)
+colnames(hotspots_v) <- colnames(hotspots_m)
+hotspots_all <- rbind(hotspots_v, hotspots_m)
 
 ```
 
-### Importing a pre-processed hotspot layer as spatial object
+Now we need to reproject the hotspot data to the same CRS than the study area.
+
+```{r reproject}
+library(sf)
+study_area_crs <- st_crs(study_area)
+#study_area_epsg <- study_area_crs$epsg #check, is not working
+study_area_epsg <- 5347
+study_area <- st_transform(study_area, study_area_epsg)
+
+#reproject
+hotspots_all <- st_transform(hotspots_all, study_area_epsg)
+```
+
+Lastly, we clip the hotspots by the study area.
+```{r clip, eval=F, include =T}
+hotspots_studyarea <- st_intersects(x=hotspots_all, y=study_area)
+hotspots_studyarea_logical <- lengths(hotspots_studyarea) > 0
+
+hotspots_all = hotspots_all[hotspots_studyarea_logical, ]
+
+```
+
+
+### _Importing a pre-processed hotspot layer as spatial object_
 
 Alternatively, the script can also begin with a pre-processed final hotspot layer.
 
@@ -104,8 +139,9 @@ study_area <- st_read(dsn = "data/Delta_BajoParana_EPSG5347.shp", quiet=TRUE)
 
 ```
 
+----------------
 
-### Data processing
+## Data processing
 
 This layer has both MODIS and VIIRS hotspots.
 Extract VIIRS 2020 data.
@@ -175,7 +211,7 @@ plot_diario <- focos_cum %>%
   scale_y_continuous(breaks=seq(from = 0, to = 3000, by = 200)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), axis.line=element_line(color="black"), axis.text.y=element_text(color="black"), legend.position = "none" ) +
-  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
+  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; CONICET & 3iA-UNSAM")  
 
 plot_diario
 
@@ -191,7 +227,7 @@ plot_daily_eng <- focos_cum %>%
   scale_y_continuous(breaks=seq(from = 0, to = 3000, by = 200)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position="none", axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
-  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
+  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; CONICET & 3iA-UNSAM")  
 
 plot_daily_eng
 ```
@@ -199,8 +235,8 @@ plot_daily_eng
 We may export these plots.
 
 ```{r save_daily, eval=F, include=T}
-ggsave("output/Focos_diario_2020-11-10.png", plot = plot_diario, width = 8, height = 5, dpi = 300)
-ggsave("output/Hotspot_daily_2020-11-10.png", plot = plot_daily_eng, width = 8, height = 5, dpi = 300)
+ggsave("output/Focos_diario_2020-12-31.png", plot = plot_diario, width = 9, height = 5, dpi = 300)
+ggsave("output/Hotspot_daily_2020-12-31.png", plot = plot_daily_eng, width = 9, height = 5, dpi = 300)
 ```
 
 A plot of the cummulative hostspots. Spanish and English versions.
@@ -218,7 +254,7 @@ plot_acum <- focos_cum %>%
   scale_y_continuous(breaks=seq(from = 0, to = (hotspots_count2020 + 1000), by = 2500)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
-  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día y acumulados al 10/11/2020, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
+  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día y acumulados al 31/12/2020, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; CONICET & 3iA-UNSAM")  
 
 plot_acum
 
@@ -237,15 +273,15 @@ plot_cum_eng <- focos_cum %>%
   scale_y_continuous(breaks=seq(from = 0, to = (hotspots_count2020 + 1000), by = 2500)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.15, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
-  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots and cummulative numbers up to 11/10/2020, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM")  
+  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots and cummulative numbers up to 12/31/2020, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; CONICET & 3iA-UNSAM")  
 plot_cum_eng
 
 ```
 
 We may save these plots.
 ```{r save_cum, eval=F, include=T}
-ggsave("output/Focos_acumulados_2020-11-10.png", plot = plot_acum, width = 8, height = 5, dpi = 300)
-ggsave("output/Hotspot_cum_2020-11-10.png", plot = plot_cum_eng, width = 8, height = 5, dpi = 300)
+ggsave("output/Focos_acumulados_2020-12-31.png", plot = plot_acum, width = 9, height = 5, dpi = 300)
+ggsave("output/Hotspot_cum_2020-12-31.png", plot = plot_cum_eng, width = 9, height = 5, dpi = 300)
 ```
 
 The next plot summarizes the number of VIIRS hotspots per month. 
@@ -287,7 +323,7 @@ The month with the highest number of hotspots is August, with **`r VIIRSagosto`*
 
 
 ## Historical comparison using MODIS (November 2001 - present)
-While VIIRS data (resolution: 375 m) is available from 2012, MODIS data is available from 2001. However, MODIS resolution is 1 km, so fewer number of hotspots are reported and each hotspot corresponds to a greater area. 
+While VIIRS data (resolution: 375 m) is available from 2012, MODIS data is available from 2001. However, MODIS resolution is 1 km, so fewer hotspots are reported and each hotspot corresponds to a greater area. 
 
 ```{r MODIS}
 focos_MODIS <- hotspots_all
@@ -304,7 +340,7 @@ focos_MODIS <- focos_MODIS %>%
 head(focos_MODIS)
 ```
 
-Now we compute and plot the number of MODIS hostpots per year.
+Now we compute and plot the number of MODIS hotspots per year.
 
 ```{r modis2}
 #calculo de focos por anio
@@ -323,13 +359,13 @@ MODIS_year <- ggplot(subset(focos_MODIS_anio, focos_MODIS_anio$anio!="2000"), ae
   theme_bw()
 MODIS_year
 
-ggsave("output/MODIS_2001-2020.png", plot = MODIS_year, width = 8, height = 5, dpi = 300)
+ggsave("output/MODIS_2001-2020.png", plot = MODIS_year, width = 9, height = 5, dpi = 300)
 
 MODIS_2020 <- as.numeric(as.list(subset(focos_MODIS_anio, focos_MODIS_anio$anio ==2020))[2])
 MODIS_2008 <-  as.numeric(as.list(subset(focos_MODIS_anio, focos_MODIS_anio$anio ==2008))[2])
 ```
 
-The cummulative number of MODIS hotspots during 2020 is **`r MODIS_2020`** up to **`r last_date`**, which is **`r round(MODIS_2020/MODIS_2008*100,1)`%** of the MODIS hotspots recorded during 2008. 
+The cumulative number of MODIS hotspots during 2020 is **`r MODIS_2020`** up to **`r last_date`**, which is **`r round(MODIS_2020/MODIS_2008*100,1)`%** of the MODIS hotspots recorded during 2008. 
 
 Some plots summarizing the historical hotspots from MODIS data. Daily and monthly plots.
 
@@ -405,7 +441,7 @@ VIIRS_anio <- ggplot(subset(focos_VIIRS_anio, focos_VIIRS_anio$anio!="2000"), ae
   theme_bw()
 VIIRS_anio
 
-ggsave("output/VIIRS_2012-2020.png", plot = VIIRS_anio, width = 8, height = 5, dpi = 300)
+ggsave("output/VIIRS_2012-2020.png", plot = VIIRS_anio, width = 9, height = 5, dpi = 300)
 ```
 
 Lastly, we can comparte VIIRS and MODIS records. Spanish and English versions. 
@@ -457,6 +493,6 @@ MODIS_VIIRS_plot_eng
 
 We may save these plots.
 ```{r historical_save, eval=F, include=T}
-ggsave("output/Focos_historicos_ambossensores.png", plot = MODIS_VIIRS_plot, width = 8, height = 5, dpi = 300)
-ggsave("output/Focos_historicos_ambossensores_english.png", plot = MODIS_VIIRS_plot_eng, width = 8, height = 5, dpi = 300)
+ggsave("output/Focos_historicos_ambossensores.png", plot = MODIS_VIIRS_plot, width = 9, height = 5, dpi = 300)
+ggsave("output/Focos_historicos_ambossensores_english.png", plot = MODIS_VIIRS_plot_eng, width = 9, height = 5, dpi = 300)
 ```
