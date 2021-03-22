@@ -26,21 +26,21 @@ Wildfires can be monitored and analyzed using thermal hotspots records derived f
 # Última actualización / Last update 
 ## Fecha 10/11/2020 / Date: 11/10/2020
 ### En castellano (In Spanish, English below)
-El número de focos VIIRS registrados durante este año en el Delta del Paraná es
-**37.197**, hasta el **10/11/2020**
+El número de focos VIIRS registrados durante el 2020 en el Delta del Paraná es
+**39.821**, hasta el **31/12/2020**
 
-![Focos diarios](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_diario_2020-11-10.png)
+![Focos diarios](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_diario_2020-12-31.png)
 
-![Focos diarios y acumulados](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_acumulados_2020-11-10.png)
+![Focos diarios y acumulados](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Focos_acumulados_2020-12-31.png)
 
 
 ### In English (en inglés, en castellano arriba)
 The number of VIIRS hotspots recorded during this year in the Paraná River Delta is 
-**37,197**, up to **2020/11/10**.
+**39,821**, up to **2020/12/31**.
 
-![Daily hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_daily_2020-11-10.png)
+![Daily hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_daily_2020-12-31.png)
 
-![Daily and cummulative hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_cum_2020-11-10.png)
+![Daily and cummulative hotspots](https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/output/Hotspot_cum_2020-12-31.png)
 
 
 ## Links a artículos publicados, entrevistas y charlas durante 2020
