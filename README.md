@@ -16,8 +16,7 @@ EN: PK and PM collaborated with the ecological analysis of the wildifire situati
 ## Licencia / License
 Por favor referirse a / Please refer to: https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/LICENSE.md
 
-**Cita / Citation**
-[![DOI](https://zenodo.org/badge/286583706.svg)](https://zenodo.org/badge/latestdoi/286583706)
+**Cita / Citation**:   [![DOI](https://zenodo.org/badge/286583706.svg)](https://zenodo.org/badge/latestdoi/286583706)
 
 
 ## Resumen / Abstract 
