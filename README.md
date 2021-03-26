@@ -1,7 +1,7 @@
 # Incendios en el Delta del Paraná / Fires in the Paraná River Delta
 ES: Análisis de focos de calor durante los incendios del Delta del Paraná en 2020
 
-EN: Analysis of thermal hotspots during the fire events in the Paraná River Delta en 2020
+EN: Analysis of thermal hotspots during the 2020 fire events in the Paraná River Delta, Argentina
 
 ## Autora / Author
 Natalia Morandeira (nmorandeira@unsam.edu.ar, Investigadora/Researcher CONICET, 3iA-UNSAM)
