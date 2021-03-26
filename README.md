@@ -16,6 +16,10 @@ EN: PK and PM collaborated with the ecological analysis of the wildifire situati
 ## Licencia / License
 Por favor referirse a / Please refer to: https://github.com/nmorandeira/Fires_ParanaRiverDelta/blob/master/LICENSE.md
 
+**Cita / Citation**
+[![DOI](https://zenodo.org/badge/286583706.svg)](https://zenodo.org/badge/latestdoi/286583706)
+
+
 ## Resumen / Abstract 
 ### Versión en castellano:
 Los incendios de áreas naturales pueden ser monitoreados y analizados utilizando registros de focos de calor térmico derivados de datos satelitales. En 2020, una sequía severa afecta a la planicie de inundación de Argentina y cientos de focos de calor —probablemente incendios activos— son informados a diario por el servicio Fire Information for Resource Management System (FIRMS-NASA). Los productos FIRMS-NASA son provistos en múltiples objetos espaciales (_shapefiles_): registros actuales y de archivo de varios sensores remotos. El objetivo es procesar estos datos, analizar la cantidad de focos de calor durante 2020 y compararlos con los incendios de años anteriores. Con R, realicé códigos e informes reproducibles, lo que me facilita repetir los análisis y gráficos muchas veces, para mi propio conocimiento y también para difundir en redes sociales y ante la consultaq de periodistas. Las principales librerías de R utilizadas son sf, tidyverse, spdplyr, ggplot2 y RMarkDown. Este flujo de trabajo puede ser utilizado para analizar focos de calor en cualquier otro área de interés.
