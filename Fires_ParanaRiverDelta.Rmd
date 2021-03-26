@@ -2,14 +2,17 @@
 title: "Fires in the Paraná River Delta"
 author: "Natalia Morandeira"
 date: "8/7/2020, updated 3/22/2021"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
-```{r setup}
+```{r setup, include=F}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 --------
+
 ## Input the spatial objects to R
 
 ### Data source
@@ -39,7 +42,7 @@ zipfiles
 
 We unzip the data.
 
-```{r unzip, eval=F, include = T}
+```{r unzip, eval=T, include = T}
 MODISzip <- paste("data/zip/", zipfiles[1], sep="")
 VIIRSzip <- paste("data/zip/", zipfiles[2], sep="")
 
@@ -52,7 +55,7 @@ There are `r length(zipfiles)` zip files in the database (expected: two files).
 Handle spatial data. Four shapefiles + Study area.
 The code is prepared to detect the appropriate strings and generate the spatial objects, based on the naming conventions of FIRMS-NASA.
 
-```{r read_spatial_data, eval=F, include = T}
+```{r read_spatial_data, eval=T, include = T}
 library(sf)
 library(stringr)
 spatial_files <- list.files(path = "data/hotspots")
@@ -87,7 +90,7 @@ study_area <- st_read(study_area, quiet=TRUE)
 
 Merge the hotspot data.
 
-```{r merge_shp, eval=F}
+```{r merge_shp, eval=T}
 #Remove CONFIDENCE columns since they have different formats
 hotspots_VIIRS_recent$CONFIDENCE = NULL
 hotspots_VIIRS_archive$CONFIDENCE = NULL
@@ -119,7 +122,7 @@ hotspots_all <- st_transform(hotspots_all, study_area_epsg)
 ```
 
 Lastly, we clip the hotspots by the study area.
-```{r clip, eval=F, include =T}
+```{r clip, eval=T, include =T}
 hotspots_studyarea <- st_intersects(x=hotspots_all, y=study_area)
 hotspots_studyarea_logical <- lengths(hotspots_studyarea) > 0
 
@@ -132,10 +135,10 @@ hotspots_all = hotspots_all[hotspots_studyarea_logical, ]
 
 Alternatively, the script can also begin with a pre-processed final hotspot layer.
 
-```{r read_file, eval = T, include = TRUE}
+```{r read_file, eval = F, include = TRUE}
 library(sf)
 hotspots_all <- st_read("data/hotspots/focos_all_20201110.shp", quiet=TRUE) 
-study_area <- st_read(dsn = "data/Delta_BajoParana_EPSG5347.shp", quiet=TRUE)
+study_area <- st_read(dsn = "data/study_area/Delta_BajoParana_EPSG5347.shp", quiet=TRUE)
 
 ```
 
@@ -234,7 +237,7 @@ plot_daily_eng
 
 We may export these plots.
 
-```{r save_daily, eval=F, include=T}
+```{r save_daily, eval=T, include=T}
 ggsave("output/Focos_diario_2020-12-31.png", plot = plot_diario, width = 9, height = 5, dpi = 300)
 ggsave("output/Hotspot_daily_2020-12-31.png", plot = plot_daily_eng, width = 9, height = 5, dpi = 300)
 ```
@@ -279,7 +282,7 @@ plot_cum_eng
 ```
 
 We may save these plots.
-```{r save_cum, eval=F, include=T}
+```{r save_cum, eval=T, include=T}
 ggsave("output/Focos_acumulados_2020-12-31.png", plot = plot_acum, width = 9, height = 5, dpi = 300)
 ggsave("output/Hotspot_cum_2020-12-31.png", plot = plot_cum_eng, width = 9, height = 5, dpi = 300)
 ```
@@ -492,7 +495,7 @@ MODIS_VIIRS_plot_eng
 ```
 
 We may save these plots.
-```{r historical_save, eval=F, include=T}
+```{r historical_save, eval=T, include=T}
 ggsave("output/Focos_historicos_ambossensores.png", plot = MODIS_VIIRS_plot, width = 9, height = 5, dpi = 300)
 ggsave("output/Focos_historicos_ambossensores_english.png", plot = MODIS_VIIRS_plot_eng, width = 9, height = 5, dpi = 300)
 ```
