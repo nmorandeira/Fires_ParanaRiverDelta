@@ -130,6 +130,11 @@ hotspots_all = hotspots_all[hotspots_studyarea_logical, ]
 
 ```
 
+Optional: write the hotspot layer.
+```{r save_shp, eval=F, include =T}
+sf::st_write(hotspots_all, "output/hotspot_all_2020.gpkg")
+
+```
 
 ### _Importing a pre-processed hotspot layer as spatial object_
 
@@ -165,6 +170,12 @@ hotspots_count2020 <- as.numeric(nrow(hotspots_VIIRS_2020)) # Total hotspots in 
 ```
 
 The number of VIIRS hotspots recorded during this year is **`r hotspots_count2020`**, up to **`r last_date`**.
+
+Optional: write the VIIRS hotspot layer.
+```{r save_shp, eval=F, include =T}
+sf::st_write(hotspots_VIIRS_2020, "output/hotspot_VIIRS_2020.gpkg")
+
+```
 
 Let's get a quick interactive map to visualize the location of the hotspot records. The date of the record can be obtained by positioning the mouse onto the point.
 
