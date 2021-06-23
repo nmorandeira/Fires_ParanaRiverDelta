@@ -1,9 +1,7 @@
 ---
 title: "Incendios en el Delta del Paraná, Argentina"
 author: "Natalia Morandeira (nmorandeira@unsam.edu.ar)"
-output:
-  html_document: default
-  pdf_document: default
+always_allow_html: yes
 ---
 
 ```{r setup, include=F}
@@ -141,10 +139,12 @@ sf::st_write(hotspots_VIIRS_2020, "output/hotspot_VIIRS_2020.gpkg")
 
 El siguiente mapa interactivo muestra la localización de los registros de focos de calor. La fecha puede ser consultada al posicionar el cursor sobre cada punto.
 
-```{r map}
+```{r map, eval=T, collapse = T, fig.width=6, fig.height=3}
 library(tmap)
-tmap_mode("view") 
-mapa <- tm_shape(hotspots_VIIRS_2020,  bbox= study_area) + 
+library(leaflet.providers)
+tmap_mode("view")
+mapa <- tm_basemap("Esri.WorldImagery") +
+  tm_shape(hotspots_VIIRS_2020,  bbox= study_area) + 
   tm_dots(col = "red", size = 0.03, alpha = 0.3, id="ACQ_DATE") +
   tm_layout(title = "Focos de incendio en el Bajo Paraná - 2020, Datos VIIRS", legend.frame = T) +
   tm_shape(study_area) +
@@ -209,7 +209,7 @@ plot_daily_eng <- focos_cum %>%
 
 
 
-```{r save_daily, eval=T, include=F}
+```{r save_daily, eval=F, include=F}
 ggsave("output/Focos_diario_2020-12-31.png", plot = plot_diario, width = 9, height = 5, dpi = 300)
 ggsave("output/Hotspot_daily_2020-12-31.png", plot = plot_daily_eng, width = 9, height = 5, dpi = 300)
 ```
@@ -254,7 +254,7 @@ plot_cum_eng <- focos_cum %>%
 ```
 
 
-```{r save_cum, eval=T, include=F}
+```{r save_cum, eval=F, include=F}
 ggsave("output/Focos_acumulados_2020-12-31.png", plot = plot_acum, width = 9, height = 5, dpi = 300)
 ggsave("output/Hotspot_cum_2020-12-31.png", plot = plot_cum_eng, width = 9, height = 5, dpi = 300)
 ```
@@ -343,7 +343,7 @@ MODIS_2008 <-  as.numeric(as.list(subset(focos_MODIS_anio, focos_MODIS_anio$anio
 
 El número acumulado de focos MODIS durante 2020 es **`r MODIS_2020`** hasta el día **`r last_date`**, lo cual consiste en el **`r round(MODIS_2020/MODIS_2008*100,1)`%** de los focos MODIS registrados durante 2008. 
 
-Los siguientes gráficos resumen los focos históricos MODIS. 
+El siguiente gráfico resumen los focos históricos MODIS. 
 
 ```{r MODIS_plots}
 #diario
@@ -370,7 +370,7 @@ focos_MODIS_mes <- focos_MODIS %>%
 
 #convertir a fecha
 focos_MODIS_mes$mes <- as.Date(paste(focos_MODIS_mes$mes,1,sep="/"),"%Y/%m/%d")
-head(focos_MODIS_mes)
+#head(focos_MODIS_mes)
 
 MODIS_mes <-  focos_MODIS_mes %>%
   ggplot(aes (x=mes, y=cantidad_mes)) +
@@ -382,7 +382,7 @@ MODIS_mes <-  focos_MODIS_mes %>%
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
   labs(title="Datos históricos - incendios en el Delta del Paraná (Argentina)", subtitle = "Focos de calor mensuales (2001 - presente), en base a datos MODIS de FIRMS-NASA", caption = "Natalia Morandeira; 3iA-UNSAM") 
 
-MODIS_mes
+#MODIS_mes
 
 #ggsave("Focos_historicos_mensual.png", plot = p4, width = 8, height = 5, dpi = 300)
 ```
@@ -417,7 +417,7 @@ VIIRS_anio <- ggplot(subset(focos_VIIRS_anio, focos_VIIRS_anio$anio!="2000"), ae
   theme_bw()
 VIIRS_anio
 
-ggsave("output/VIIRS_2012-2020.png", plot = VIIRS_anio, width = 9, height = 5, dpi = 300)
+#ggsave("output/VIIRS_2012-2020.png", plot = VIIRS_anio, width = 9, height = 5, dpi = 300)
 ```
 
 Finalmente, podemos comparar los registros VIIRS y MODIS.

@@ -39,6 +39,13 @@ unzip(VIIRSzip, exdir = "data/hotspots/")
 ```{r read_spatial_data, eval=T, include = F}
 library(sf)
 library(stringr)
+
+study_area <- list.files(path = "data/study_area/")
+study_area_shp <- str_detect(study_area, "shp")=="TRUE"
+study_area <- subset(study_area, study_area_shp == "TRUE")
+study_area <- paste("data/study_area/", study_area, sep="")
+study_area <- st_read(study_area, quiet=TRUE)
+
 spatial_files <- list.files(path = "data/hotspots")
 shp_extension <- str_detect(spatial_files, "shp")=="TRUE"
 spatial_files <- subset(spatial_files, shp_extension == "TRUE")
@@ -58,12 +65,6 @@ hotspots_MODIS_recent <- st_read(hotspots_MODIS_recent, quiet=TRUE)
 hotspots_MODIS_archive <- which(str_detect(spatial_files, "fire_archive_M6")=="TRUE")
 hotspots_MODIS_archive <- paste("data/hotspots/", spatial_files[hotspots_MODIS_archive], sep="")
 hotspots_MODIS_archive <- st_read(hotspots_MODIS_archive, quiet=TRUE)
-
-study_area <- list.files(path = "data/study_area/")
-study_area_shp <- str_detect(study_area, "shp")=="TRUE"
-study_area <- subset(study_area, study_area_shp == "TRUE")
-study_area <- paste("data/study_area/", study_area, sep="")
-study_area <- st_read(study_area, quiet=TRUE)
 
 
 ```
@@ -214,7 +215,7 @@ ggsave("output/Focos_diario_2020-12-31.png", plot = plot_diario, width = 9, heig
 ggsave("output/Hotspot_daily_2020-12-31.png", plot = plot_daily_eng, width = 9, height = 5, dpi = 300)
 ```
 
-A plot of the cummulative hostspots. Spanish and English versions.
+A plot of the cumulative hostspots. Spanish and English versions.
 
 ```{r plot_cum}
 #Spanish
@@ -241,14 +242,14 @@ plot_cum_eng <- focos_cum %>%
   #annotation_custom(rasterGrob(img, width = unit(1,"npc"), height = unit(1,"npc")), 
   #                  -Inf, Inf, -Inf, Inf) +
   geom_line() +
-  scale_color_manual(values=c("darkred", "navyblue"),  labels = c("Cummulative hotspots", "New hotspots")) +
+  scale_color_manual(values=c("darkred", "navyblue"),  labels = c("Cumulative hotspots", "New hotspots")) +
   xlab("Date") +
   ylab("Number of VIIRS hotspots") +
   scale_x_date(date_labels = "%m/%d/%Y", breaks = "week") +
   scale_y_continuous(breaks=seq(from = 0, to = (hotspots_count2020 + 1000), by = 2500)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.15, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
-  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots and cummulative numbers up to 12/31/2020, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; CONICET & 3iA-UNSAM")  
+  labs(title="Potential fires at the Paraná River Delta (Argentina)", subtitle = "Daily hotspots and cumulative numbers up to 12/31/2020, based on VIIRS data - FIRMS-NASA", caption = "Natalia Morandeira; CONICET & 3iA-UNSAM")  
 plot_cum_eng
 
 ```
