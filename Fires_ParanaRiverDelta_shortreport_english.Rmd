@@ -142,12 +142,12 @@ sf::st_write(hotspots_VIIRS_2020, "output/hotspot_VIIRS_2020.gpkg")
 
 This interactive map shows the location of the hotspot records. The date of the record can be obtained by positioning the mouse onto the point.
 
-```{r map, include=T, eval=F}
+```{r map, include=F, eval=F}
 library(tmap)
 tmap_mode("view") 
 mapa <- tm_shape(hotspots_VIIRS_2020,  bbox= study_area) + 
   tm_dots(col = "red", size = 0.03, alpha = 0.3, id="ACQ_DATE") +
-  tm_layout(title = "Focos de incendio en el Bajo Paraná - 2020, Datos VIIRS", legend.frame = T) +
+  tm_layout(title = "Thermal hotspots in the Lower Paraná River floodplain, 2020 - FIRMS-NASA VIIRS data", legend.frame = T) +
   tm_shape(study_area) +
   tm_borders(col = "grey60", lwd = 2) 
 
