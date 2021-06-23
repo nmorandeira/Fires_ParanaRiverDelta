@@ -294,12 +294,12 @@ focos_MODIS_anio <- focos_MODIS %>%
 MODIS_year <- ggplot(subset(focos_MODIS_anio, focos_MODIS_anio$anio!="2000"), aes(x=anio, y=cantidad_anio)) +
   geom_col( fill="lightblue") +
   geom_text(aes(label = cantidad_anio), col="black") +
-  xlab("Año") +
-  ylab("Cantidad de focos MODIS por año") +
+  xlab("Year") +
+  ylab("Number of MODIS hotspots") +
   theme_bw()
 MODIS_year
 
-ggsave("output/MODIS_2001-2020.png", plot = MODIS_year, width = 9, height = 5, dpi = 300)
+ggsave("output/MODIS_2001-2020_EN.png", plot = MODIS_year, width = 9, height = 5, dpi = 300)
 
 MODIS_2020 <- as.numeric(as.list(subset(focos_MODIS_anio, focos_MODIS_anio$anio ==2020))[2])
 MODIS_2008 <-  as.numeric(as.list(subset(focos_MODIS_anio, focos_MODIS_anio$anio ==2008))[2])
