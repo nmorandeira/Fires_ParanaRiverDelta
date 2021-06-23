@@ -142,7 +142,7 @@ sf::st_write(hotspots_VIIRS_2020, "output/hotspot_VIIRS_2020.gpkg")
 
 This interactive map shows the location of the hotspot records. The date of the record can be obtained by positioning the mouse onto the point.
 
-```{r map}
+```{r map, include=T, eval=F}
 library(tmap)
 tmap_mode("view") 
 mapa <- tm_shape(hotspots_VIIRS_2020,  bbox= study_area) + 
@@ -174,22 +174,6 @@ head(focos_cum)
 First, we'll get a plot of the daily records. Spanish and English versions
 
 ```{r daily}
-#Spanish
-plot_diario <- focos_cum %>%
-  pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
-  filter(focos == "cantidad_diaria") %>%
-  ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
-  geom_col() +
-  scale_color_manual(values=c("navyblue", "navyblue"),  labels = c("Focos diarios", "Nuevos focos")) +
-  xlab("Fecha") +
-  ylab("Cantidad de focos de calor") +
-  scale_x_date(date_labels = "%d/%m/%Y", breaks = "week") +
-  scale_y_continuous(breaks=seq(from = 0, to = 3000, by = 200)) +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), axis.line=element_line(color="black"), axis.text.y=element_text(color="black"), legend.position = "none" ) +
-  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; CONICET & 3iA-UNSAM")  
-
-plot_diario
 
 plot_daily_eng <- focos_cum %>%
   pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
@@ -211,31 +195,12 @@ plot_daily_eng
 
 
 ```{r save_daily, eval=T, include=F}
-ggsave("output/Focos_diario_2020-12-31.png", plot = plot_diario, width = 9, height = 5, dpi = 300)
 ggsave("output/Hotspot_daily_2020-12-31.png", plot = plot_daily_eng, width = 9, height = 5, dpi = 300)
 ```
 
 A plot of the cumulative hostspots. Spanish and English versions.
 
 ```{r plot_cum}
-#Spanish
-plot_acum <- focos_cum %>%
-  pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
-  ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
-  geom_line() +
-  scale_color_manual(values=c("darkred", "navyblue"),  labels = c("Focos acumulados", "Focos activos")) +
-  xlab("Fecha") +
-  ylab("Cantidad de focos de calor") +
-  scale_x_date(date_labels = "%d/%m/%Y", breaks = "week") +
-  scale_y_continuous(breaks=seq(from = 0, to = (hotspots_count2020 + 1000), by = 2500)) +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black") , legend.background = element_rect(colour ="grey40", size = 0.2)) +
-  labs(title="Incendios en el Delta del Paraná (Argentina) durante 2020", subtitle = "Focos de calor por día y acumulados al 31/12/2020, en base a datos VIIRS de FIRMS-NASA", caption = "Natalia Morandeira; CONICET & 3iA-UNSAM")  
-
-plot_acum
-
-
-#idem en inglés
 plot_cum_eng <- focos_cum %>%
   pivot_longer(names_to = "focos", values_to = "cantidad", col=cantidad_diaria:acumulado) %>%
   ggplot(aes (x=acq_date, y=cantidad, color=focos)) +
@@ -256,7 +221,6 @@ plot_cum_eng
 
 
 ```{r save_cum, eval=T, include=F}
-ggsave("output/Focos_acumulados_2020-12-31.png", plot = plot_acum, width = 9, height = 5, dpi = 300)
 ggsave("output/Hotspot_cum_2020-12-31.png", plot = plot_cum_eng, width = 9, height = 5, dpi = 300)
 ```
 
@@ -345,7 +309,7 @@ The cumulative number of MODIS hotspots during 2020 is **`r MODIS_2020`** up to 
 
 Some plots summarizing the historical hotspots from MODIS data. Daily and monthly plots.
 
-```{r MODIS_plots}
+```{r MODIS_plots, message=FALSE, warning=FALSE}
 #diario
 MODIS_diario <- focos_MODIS %>%
   ggplot(aes (x=acq_date, y=cantidad_diaria)) +
@@ -420,7 +384,7 @@ VIIRS_anio
 ggsave("output/VIIRS_2012-2020.png", plot = VIIRS_anio, width = 9, height = 5, dpi = 300)
 ```
 
-Lastly, we can comparte VIIRS and MODIS records. Spanish and English versions. 
+Lastly, we can comparte VIIRS and MODIS records.
 
 ```{r comparison}
 #preparo label del eje X
@@ -436,20 +400,6 @@ focos_VIIRS_mes <- focos_VIIRS %>%
 focos_VIIRS_mes$mes <- as.Date(paste(focos_VIIRS_mes$mes,1,sep="/"),"%Y/%m/%d")
 #head(focos_VIIRS_mes)
 
-MODIS_VIIRS_plot <-  ggplot(data = focos_MODIS_mes, aes (x=mes, y=cantidad_mes)) +
-  geom_line(col="darkred") +
-  xlab("Fecha") +
-  ylab("Cantidad de focos de incendio") +
-  scale_x_date(date_labels = "%m/%Y", breaks = break.fecha) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
-  labs(title="Datos históricos - incendios en el Delta del Paraná (Argentina)", subtitle = "Focos de calor mensuales (2001 - presente), en base a datos FIRMS-NASA. Las líneas indican \nfocos detectados por MODIS (1 km) y las barras representan focos VIIRS (375 m)", caption = "Natalia Morandeira; 3iA-UNSAM") 
-
-MODIS_VIIRS_plot<- MODIS_VIIRS_plot + geom_col(data= focos_VIIRS_mes, aes (x=mes, y=cantidad_mes, group=1),  fill="orange", alpha=0.5, width = 30)
-
-MODIS_VIIRS_plot
-
-
 
 MODIS_VIIRS_plot_eng <-  ggplot(data = focos_MODIS_mes, aes (x=mes, y=cantidad_mes)) +
   geom_line(col="darkred") +
@@ -460,7 +410,7 @@ MODIS_VIIRS_plot_eng <-  ggplot(data = focos_MODIS_mes, aes (x=mes, y=cantidad_m
   theme(axis.text.x = element_text(angle=45, hjust=1, color="black"), plot.caption = element_text(hjust = 0, vjust=1, face = "italic"), plot.title = element_text(face = "bold"), legend.position=c(0.12, 0.85), legend.title = element_blank(), axis.line=element_line(color="black"), axis.text.y=element_text(color="black")) +
   labs(title="Historical data - Potential fires in the Paraná River Delta (Argentina)", subtitle = "Monthly number of hotspots (2001 - present), based on FIRMS-NASA data. \nLines indicate MODIS hotspots (1 km) and bars indicate VIIRS hotspots (375 m)", caption = "Patricia Kandus, Natalia Morandeira and Priscilla Minotti; 3iA-UNSAM") 
 
-MODIS_VIIRS_plot_eng <- MODIS_VIIRS_plot + geom_col(data= focos_VIIRS_mes, aes (x=mes, y=cantidad_mes, group=1),  fill="orange", alpha=0.5, width = 30)
+MODIS_VIIRS_plot_eng <- MODIS_VIIRS_plot_eng + geom_col(data= focos_VIIRS_mes, aes (x=mes, y=cantidad_mes, group=1),  fill="orange", alpha=0.5, width = 30)
 
 MODIS_VIIRS_plot_eng
 
